@@ -4,6 +4,7 @@ using ELearningApplication.API.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -11,7 +12,7 @@ using System.Text;
 namespace ELearningApplication.API.Controllers
 {
     [TypeFilter(typeof(CustomExceptionFilter))]
-    [Route("api/[controller]")]
+    [Route("api/users")]
     [ApiController]
     public class UsersController : ControllerBase
     {
@@ -26,13 +27,22 @@ namespace ELearningApplication.API.Controllers
 
         [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<ActionResult<User>> RegisterUser(User user)
+        public  IActionResult RegisterUser(int id)
         {
-            if (await _userRepository.UserExistsAsync(user.Email))
-                return BadRequest("Email already registered.");
+            // if (ModelState.IsValid)
+            // {
+            //     //Debug.WriteLine($"api {user}");
+            //     // if (await _userRepository.UserExistsAsync(user.Email))
+            //     //     return BadRequest("Email already registered.");
 
-            var registeredUser = await _userRepository.RegisterUserAsync(user);
-            return CreatedAtAction(nameof(GetUser), new { id = registeredUser.UserId }, registeredUser);
+            //     var registeredUser = await _userRepository.RegisterUserAsync(user);
+            //     return CreatedAtAction(nameof(GetUser), new { id = registeredUser.UserId }, registeredUser);
+            // }
+            // else
+            // {
+            //     return BadRequest();
+            // }
+            return Ok(id);
         }
 
         [AllowAnonymous]
@@ -43,10 +53,10 @@ namespace ELearningApplication.API.Controllers
             if (user != null)
             {
                 var token = GenerateJwtToken(login);
-                return Ok(new {token=token});
+                return Ok(new { token = token });
             }
-            return BadRequest(); 
-           
+            return BadRequest();
+
         }
         private string GenerateJwtToken(Login user)
         {
@@ -71,7 +81,7 @@ namespace ELearningApplication.API.Controllers
             return encodedToken;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         //[Authorize(Roles ="student || instructor")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
@@ -79,7 +89,7 @@ namespace ELearningApplication.API.Controllers
             return user == null ? NotFound() : Ok(user);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] User updatedUser)
         {
             if (id != updatedUser.UserId)
@@ -100,6 +110,22 @@ namespace ELearningApplication.API.Controllers
 
             return Ok("Divide by Zero Exception");
         }
+
+        [AllowAnonymous]
+        [HttpOptions]
+        [Route("preflight")]
+        public IActionResult Preflight()
+        {
+            return NoContent();
+        }
+
+        // public IActionResult Preflight()
+        // {
+        //     Response.Headers.Add("Access-Control-Allow-Origin", "https://legendary-adventure-jjgg9wrpr97q2q7jg-5173.app.github.dev");
+        //     Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type, Authorization");
+        //     Response.Headers.Add("Access-Control-Allow-Methods", "POST, OPTIONS");
+        //     return Ok();
+        // }
 
     }
 }

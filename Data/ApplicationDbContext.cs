@@ -14,7 +14,7 @@ namespace ELearningApplication.API.Data
         public DbSet<Enrollment> Enrollments { get; set; }
         public DbSet<Assessment> Assessments { get; set; }
         public DbSet<Submission> Submissions { get; set; }
-
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

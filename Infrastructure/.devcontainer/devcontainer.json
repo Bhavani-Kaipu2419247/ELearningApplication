@@ -1,0 +1,14 @@
+{
+  "name": "My Backend Project",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "elearningapplicationapi",  // Replace with your actual service name
+  "workspaceFolder": "/workspace",
+  "forwardPorts": [5177],
+  "portsAttributes": {
+    "5177": {
+      "label": "Backend API",
+      "visibility": "public"
+    }
+  },
+  "postCreateCommand": "echo 'Devcontainer setup complete!'"
+}

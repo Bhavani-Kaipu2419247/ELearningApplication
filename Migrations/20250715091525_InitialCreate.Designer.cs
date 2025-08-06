@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ELearningApplication.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250709042956_ELearning")]
-    partial class ELearning
+    [Migration("20250715091525_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
