@@ -27,22 +27,21 @@ namespace ELearningApplication.API.Controllers
 
         [AllowAnonymous]
         [HttpPost("register")]
-        public  IActionResult RegisterUser(int id)
+        public  async Task<IActionResult> RegisterUser([FromBody] User user)
         {
-            // if (ModelState.IsValid)
-            // {
-            //     //Debug.WriteLine($"api {user}");
-            //     // if (await _userRepository.UserExistsAsync(user.Email))
-            //     //     return BadRequest("Email already registered.");
+            if (ModelState.IsValid)
+            {
+                //Debug.WriteLine($"api {user}");
+                // if (await _userRepository.UserExistsAsync(user.Email))
+                //     return BadRequest("Email already registered.");
 
-            //     var registeredUser = await _userRepository.RegisterUserAsync(user);
-            //     return CreatedAtAction(nameof(GetUser), new { id = registeredUser.UserId }, registeredUser);
-            // }
-            // else
-            // {
-            //     return BadRequest();
-            // }
-            return Ok(id);
+                var registeredUser = await _userRepository.RegisterUserAsync(user);
+                return CreatedAtAction(nameof(GetUser), new { id = registeredUser.UserId }, registeredUser);
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         [AllowAnonymous]
